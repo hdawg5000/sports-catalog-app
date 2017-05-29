@@ -6,8 +6,25 @@
   </head>
   <body>
     <h1>Catalog App</h1>
-    <p>
-      This will be the page to edit an item
-    </p>
+    <h1>Edit Item</h1>
+    <form action="#" method="post">
+      <p>
+        Title
+      </p>
+      <input type="text" value="{{item.name}}" />
+      <p>
+        Description
+      </p>
+      <textarea rows="4" cols="50">{{item.description}}</textarea>
+      <p>
+        Category
+      </p>
+      <select name="categories">
+        {% for category in categories %}
+          <<option value="{{category.name}}">{{category.name}}</option>
+        {% endfor %}
+      </select></br></br>
+      <input type="submit" value="Edit" />
+    </form>
   </body>
 </html>

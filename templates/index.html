@@ -6,8 +6,19 @@
   </head>
   <body>
     <h1>Catalog App</h1>
-    <p>
-      This is the homepage
-    </p>
+    <h1>Categories</h1>
+    {% for category in categories %}
+      <p>
+        {{category.name}}
+      </p>
+    {% endfor %}
+    <h1>Latest Items</h1>
+    <ul>
+      {% for item in latestItems %}
+        <li>
+          {{item.name}}
+        </li>
+      {% endfor %}
+    </ul>
   </body>
 </html>

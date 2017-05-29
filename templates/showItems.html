@@ -6,8 +6,19 @@
   </head>
   <body>
     <h1>Catalog App</h1>
-    <p>
-      This will be the page to display all items in the clicked category
-    </p>
+    <h1>Categories</h1>
+    {% for category in categories %}
+      <p>
+        {{category.name}}
+      </p>
+    {% endfor %}
+    <h1>{{category.name}} Items</h1>
+    <ul>
+      {% for item in items %}
+        <li>
+          {{item.name}}
+        </li>
+      {% endfor %}
+    </ul>
   </body>
 </html>
