@@ -133,36 +133,52 @@ def gdisconnect():
 #Show all categories and last 8 items by updated_at timestamp
 @app.route('/')
 def showHomePage():
+    #Check is user is logged in. If not, add item link will be hidden
+    logged_in = True
+    if 'username' not in login_session:
+        logged_in = False
     categories = session.query(Category).all()
     latestItems = session.query(Item).order_by(desc(Item.updated_at)).limit(8)
-    return render_template('index.html', categories=categories, latestItems=latestItems)
+    return render_template('index.html', categories=categories, latestItems=latestItems, allowed=logged_in)
 
 #Show all items in a category when clicking on the category
 @app.route('/category/<int:category_id>/items')
 def showItems(category_id):
+    #Check is user is logged in. If not, add item link will be hidden
+    logged_in = True
+    if 'username' not in login_session:
+        logged_in = False
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=category_id).one()
     items = session.query(Item).filter_by(category_id=category_id).all()
-    return render_template('showItems.html', items=items, category=category, categories=categories)
+    return render_template('showItems.html', items=items, category=category, categories=categories, allowed=logged_in)
 
 #Show item name and description
 @app.route('/category/<int:category_id>/item/<int:item_id>')
 def showItem(category_id, item_id):
+    #Check is user is logged in. If not, edit and delete links will be hidden
+    logged_in = True
+    if 'username' not in login_session:
+        logged_in = False
     category = session.query(Category).filter_by(id=category_id).one()
     item = session.query(Item).filter_by(id=item_id).one()
-    return render_template('showItem.html', item=item, category=category)
+    return render_template('showItem.html', item=item, category=category, allowed=logged_in)
 
 #Add a new item given the category ID
 @app.route('/item/new', methods=['GET', 'POST'])
 def addItem():
     categories = session.query(Category).all()
     if request.method == 'POST':
-        categoryName = request.form['category']
-        category = session.query(Category).filter_by(name=categoryName).one()
-        newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=1)
-        session.add(newItem)
-        session.commit()
-        return redirect(url_for('showItems', category_id=category.id))
+        #Check is user is logged in. If not, redirect to login page
+        if 'username' not in login_session:
+            return redirect('/login')
+        else:
+            categoryName = request.form['category']
+            category = session.query(Category).filter_by(name=categoryName).one()
+            newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=1)
+            session.add(newItem)
+            session.commit()
+            return redirect(url_for('showItems', category_id=category.id))
     else:
         return render_template('addItem.html', categories=categories)
 
@@ -170,14 +186,18 @@ def addItem():
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(category_id, item_id):
     if request.method == 'POST':
-        category = session.query(Category).filter_by(name=request.form['category']).one()
-        item = session.query(Item).filter_by(id=item_id).one()
-        item.name = request.form['name']
-        item.description = request.form['description']
-        item.category_id = category.id
-        session.add(item)
-        session.commit()
-        return redirect(url_for('showItems', category_id=category.id))
+        #Check is user is logged in. If not, redirect to login page
+        if 'username' not in login_session:
+            return redirect('/login')
+        else:
+            category = session.query(Category).filter_by(name=request.form['category']).one()
+            item = session.query(Item).filter_by(id=item_id).one()
+            item.name = request.form['name']
+            item.description = request.form['description']
+            item.category_id = category.id
+            session.add(item)
+            session.commit()
+            return redirect(url_for('showItems', category_id=category.id))
     else:
         category = session.query(Category).filter_by(id=category_id).one()
         item = session.query(Item).filter_by(id=item_id).one()
@@ -187,15 +207,19 @@ def editItem(category_id, item_id):
 #Delete item from category
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(category_id, item_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    if request.method == 'POST':
-        item = session.query(Item).filter_by(id=item_id).one()
-        session.delete(item)
-        session.commit()
-        return redirect(url_for('showItems', category_id=category.id))
+    #Check is user is logged in. If not, redirect to login page
+    if 'username' not in login_session:
+        return redirect('/login')
     else:
-        item = session.query(Item).filter_by(id=item_id).one()
-        return render_template('deleteItem.html', item=item, category=category)
+        category = session.query(Category).filter_by(id=category_id).one()
+        if request.method == 'POST':
+            item = session.query(Item).filter_by(id=item_id).one()
+            session.delete(item)
+            session.commit()
+            return redirect(url_for('showItems', category_id=category.id))
+        else:
+            item = session.query(Item).filter_by(id=item_id).one()
+            return render_template('deleteItem.html', item=item, category=category)
 
 #API endpoint to show all categories
 @app.route('/api/v1/categories.json')

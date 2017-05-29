@@ -15,6 +15,9 @@
       {% endfor %}
     </ul>
     <h1>Latest Items</h1>
+    {% if allowed %}
+      <a href="{{url_for('addItem')}}">Add item to list</a>
+    {% endif %}
     <ul>
       {% for item in latestItems %}
         <li>

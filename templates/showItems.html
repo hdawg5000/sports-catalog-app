@@ -22,5 +22,8 @@
         </li>
       {% endfor %}
     </ul>
+    {% if allowed %}
+      <a href="{{url_for('addItem')}}">Add item to list</a>
+    {% endif %}
   </body>
 </html>
