@@ -113,7 +113,7 @@ session.commit()
 
 #Create baseball category
 baseballCategory = Category(name="Baseball")
-session.add(basketballCategory)
+session.add(baseballCategory)
 session.commit()
 
 #Create items for the baseball category
