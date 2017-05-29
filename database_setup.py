@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-import datetime
+import datetime, json
 
 Base = declarative_base()
 
@@ -31,7 +31,7 @@ class User(Base):
             'id' : self.id,
             'name' : self.name,
             'username' : self.username,
-            'created_at' : self.created_at
+            'created_at' : str(self.created_at)
         }
 
 class Item(Base):
@@ -52,8 +52,8 @@ class Item(Base):
             'id': self.id,
             'name' : self.name,
             'description' : self.description,
-            'created_at' : self.created_at,
-            'updated_at' : self.updated_at,
+            'created_at' : str(self.created_at),
+            'updated_at' : str(self.updated_at),
             'category_id' : self.category_id,
             'user_id' : self.user_id
         }

@@ -3,6 +3,7 @@ from database_setup import Base, Category, Item, User
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine, desc
+import json
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
