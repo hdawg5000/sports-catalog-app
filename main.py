@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 from database_setup import Base, Category, Item, User
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -77,6 +77,48 @@ def deleteItem(category_id, item_id):
     else:
         item = session.query(Item).filter_by(id=item_id).one()
         return render_template('deleteItem.html', item=item, category=category)
+
+#API endpoint to show all categories
+@app.route('/api/v1/categories.json')
+def showAllCategoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(Categories = [i.serialize for i in categories])
+
+#API endpoint to show all items
+@app.route('/api/v1/items.json')
+def showAllItemsJSON():
+    items = session.query(Item).all()
+    return jsonify(Items = [i.serialize for i in items])
+
+#API endpoint to show all items in a given category
+@app.route('/api/v1/category/<int:category_id>/items.json')
+def showItemsJSON(category_id):
+    items = session.query(Item).filter_by(category_id=category_id).all()
+    return jsonify(Items = [i.serialize for i in items])
+
+#API endpoint to show category given category ID
+@app.route('/api/v1/category/<int:category_id>.json')
+def showCategoryJSON(category_id):
+    category = session.query(Category).filter_by(id=category_id).one()
+    return jsonify(Category = category.serialize)
+
+#API endpoint to show item given item ID
+@app.route('/api/v1/item/<int:item_id>.json')
+def showItemJSON(item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(Item = item.serialize)
+
+#API endpoint to show all users
+@app.route('/api/v1/users.json')
+def showAllUsersJSON():
+    users = session.query(User).all()
+    return jsonify(Users = [i.serialize for i in users])
+
+#API endpoint to show user information
+@app.route('/api/v1/user/<int:user_id>.json')
+def showUserJSON(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return jsonify(Users = user.serialize)
 
 if __name__ == '__main__':
     app.debug = True
