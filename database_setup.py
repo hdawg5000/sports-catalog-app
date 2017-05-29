@@ -13,7 +13,8 @@ class Category(Base):
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    username = Column(String(100))
+    name = Column(String(100))
+    username = Column(String(100), unique=True)
     password_hash = Column(String(100))
     created_at = Column(DateTime, nullable=False, default=datetime.datetime.utcnow())
 
