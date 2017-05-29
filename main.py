@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 from database_setup import Base, Category, Item, User
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -16,8 +16,7 @@ app = Flask(__name__)
 def showHomePage():
     categories = session.query(Category).all()
     latestItems = session.query(Item).order_by(desc(Item.updated_at)).limit(8)
-    return render_template('index.html', categories=categories, \
-        latestItems=latestItems)
+    return render_template('index.html', categories=categories, latestItems=latestItems)
 
 #Show all items in a category when clicking on the category
 @app.route('/category/<int:category_id>/items')
@@ -38,23 +37,46 @@ def showItem(category_id, item_id):
 @app.route('/item/new', methods=['GET', 'POST'])
 def addItem():
     categories = session.query(Category).all()
-    return render_template('addItem.html', categories=categories)
+    if request.method == 'POST':
+        categoryName = request.form['category']
+        category = session.query(Category).filter_by(name=categoryName).one()
+        newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=1)
+        session.add(newItem)
+        session.commit()
+        return redirect(url_for('showItems', category_id=category.id))
+    else:
+        return render_template('addItem.html', categories=categories)
 
 #Edit an item given the category ID
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(category_id, item_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    categories = session.query(Category).all()
-    item = session.query(Item).filter_by(id=item_id).one()
-    return render_template('editItem.html', item=item, category=category, categories=categories)
+    if request.method == 'POST':
+        category = session.query(Category).filter_by(name=request.form['category']).one()
+        item = session.query(Item).filter_by(id=item_id).one()
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.category_id = category.id
+        session.add(item)
+        session.commit()
+        return redirect(url_for('showItems', category_id=category.id))
+    else:
+        category = session.query(Category).filter_by(id=category_id).one()
+        item = session.query(Item).filter_by(id=item_id).one()
+        categories = session.query(Category).all()
+        return render_template('editItem.html', item=item, category=category, categories=categories)
 
 #Delete item from category
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(category_id, item_id):
     category = session.query(Category).filter_by(id=category_id).one()
-    categories = session.query(Category).all()
-    item = session.query(Item).filter_by(id=item_id).one()
-    return render_template('deleteItem.html', item=item, category=category)
+    if request.method == 'POST':
+        item = session.query(Item).filter_by(id=item_id).one()
+        session.delete(item)
+        session.commit()
+        return redirect(url_for('showItems', category_id=category.id))
+    else:
+        item = session.query(Item).filter_by(id=item_id).one()
+        return render_template('deleteItem.html', item=item, category=category)
 
 if __name__ == '__main__':
     app.debug = True

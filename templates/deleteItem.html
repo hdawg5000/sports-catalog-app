@@ -10,7 +10,7 @@
     <p>
       Are you sure you want to delete '{{item.name}}'?
     </p>
-    <form action="#" method="post">
+    <form action="{{url_for('deleteItem', item_id=item.id, category_id = category.id)}}" method="post">
         <input type="submit" value="Delete" />
     </form>
   </body>

@@ -7,19 +7,19 @@
   <body>
     <h1>Catalog App</h1>
     <h1>Add Item</h1>
-    <form action="#" method="post">
+    <form action="{{url_for('addItem')}}" method="post">
       <p>
         Title
       </p>
-      <input type="text" />
+      <input type="text" name="name" />
       <p>
         Description
       </p>
-      <textarea rows="4" cols="50"></textarea>
+      <textarea rows="4" cols="50" name="description"></textarea>
       <p>
         Category
       </p>
-      <select name="categories">
+      <select name="category">
         {% for category in categories %}
           <<option value="{{category.name}}">{{category.name}}</option>
         {% endfor %}
