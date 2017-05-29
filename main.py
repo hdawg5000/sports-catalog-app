@@ -29,9 +29,9 @@ def showItems(category_id):
 #Show item name and description
 @app.route('/category/<int:category_id>/item/<int:item_id>')
 def showItem(category_id, item_id):
-    #category = session.query(Category).filter_by(id=category_id).one()
+    category = session.query(Category).filter_by(id=category_id).one()
     item = session.query(Item).filter_by(id=item_id).one()
-    return render_template('showItem.html', item=item)
+    return render_template('showItem.html', item=item, category=category)
 
 #Add a new item given the category ID
 @app.route('/item/new', methods=['GET', 'POST'])
