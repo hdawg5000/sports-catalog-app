@@ -1,17 +1,25 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Catalog App</title>
+    <title>Delete Item | Sports Catalog</title>
     <meta charset="utf-8" content="width=device-width", initial-scale="1.0">
-    <link href="static/style.css" rel="stylesheet" />
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Catalog App</h1>
-    <h1>Delete Item</h1>
-    <p>
-      Are you sure you want to delete '{{item.name}}'?
-    </p>
-    <form action="{{url_for('deleteItem', item_id=item.id, category_id = category.id)}}" method="post">
-        <input type="submit" value="Delete" />
-    </form>
+    <header>
+      <div id="container">
+        <h1><a href="{{url_for('showHomePage')}}">Sports Catalog</a></h1>
+        <a href="#" id="login">Login</a>
+      </div>
+    </header>
+    <div id="form_content">
+      <h1>Delete Item</h1>
+      <p>
+        Are you sure you want to delete '{{item.name}}'?
+      </p>
+      <form action="{{url_for('deleteItem', item_id=item.id, category_id = category.id)}}" method="post">
+          <span id="delete_btn"><input type="submit" value="Delete" /></span>
+      </form>
+    </div>
   </body>
 </html>
