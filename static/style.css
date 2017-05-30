@@ -46,7 +46,6 @@ p {
 a {
   text-decoration: none;
   color:#FFFFCC;
-  font-size: 1em;
   color: #000000;
 }
 li {
@@ -54,7 +53,7 @@ li {
   line-height: 2em;
 }
 
-#item_content, #categories_content, #category_content {
+#item_content, #categories_content, #category_content, #form_content {
   width: 50%;
   float: center;
   margin: 100px auto;
@@ -65,6 +64,68 @@ li {
 
 #item_content a {
   color: #000000;
+}
+
+#item_content p {
+  font-size: 20px;
+}
+
+#links {
+  margin-top: 30px;
+  margin-bottom: 18px;
+}
+
+#links a {
+  height: 42px;
+  background-color: #d83939;
+  color: #fff;
+  font-size: 15px;
+  text-align: center;
+  border-radius: 0.5em;
+  padding: 10px;
+}
+
+/* Edit and Delete forms */
+#form_content input[type=text] {
+  width: 250px;
+  height: 30px;
+  font-size: 18px;
+}
+
+#form_content textarea {
+  width: 250px;
+  font-size: 18px;
+  resize: none;
+}
+
+#form_content p {
+  font-size: 20px;
+  line-height: 1em;
+  margin-top: 40px;
+}
+
+#form_content select {
+  appearance: none;
+  font-size: 20px;
+  width: 250px;
+  height: 40px;
+}
+
+#form_content input[type=submit] {
+
+  height: 38px;
+  border: none;
+  background-color: #d83939;
+  color: #fff;
+  font-size: 15px;
+  text-align: center;
+  border-radius: 0.5em;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#delete_btn {
+  width: 70px;
 }
 
 .pane {position:absolute; left: 25%; border: 2px solid;

@@ -12,12 +12,14 @@
         <a href="#" id="login">Login</a>
       </div>
     </header>
-    <h1>Delete Item</h1>
-    <p>
-      Are you sure you want to delete '{{item.name}}'?
-    </p>
-    <form action="{{url_for('deleteItem', item_id=item.id, category_id = category.id)}}" method="post">
-        <input type="submit" value="Delete" />
-    </form>
+    <div id="form_content">
+      <h1>Delete Item</h1>
+      <p>
+        Are you sure you want to delete '{{item.name}}'?
+      </p>
+      <form action="{{url_for('deleteItem', item_id=item.id, category_id = category.id)}}" method="post">
+          <span id="delete_btn"><input type="submit" value="Delete" /></span>
+      </form>
+    </div>
   </body>
 </html>

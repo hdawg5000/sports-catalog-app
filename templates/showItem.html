@@ -17,8 +17,10 @@
       <p>
         {{item.description}}
       </p>
-      <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
-      <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
+      <div id="links">
+        <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
+        <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
+      </div>
     </div>
   </body>
 </html>
