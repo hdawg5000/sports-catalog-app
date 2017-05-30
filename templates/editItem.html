@@ -1,11 +1,14 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Catalog App</title>
+    <title>Edit Item | Sports Catalog</title>
     <meta charset="utf-8" content="width=device-width", initial-scale="1.0">
-    <link href="static/style.css" rel="stylesheet" />
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Catalog App</h1>
+    <header>
+      <h1>Sports Catalog</h1>
+    </header>
     <h1>Edit Item</h1>
     <form action="{{url_for('editItem', category_id=category.id, item_id=item.id)}}" method="post">
       <p>

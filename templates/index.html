@@ -1,26 +1,31 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Catalog App</title>
+    <title>Sports Catalog</title>
     <meta charset="utf-8" content="width=device-width", initial-scale="1.0">
-    <link href="static/style.css" rel="stylesheet" />
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Catalog App</h1>
-    <h1>Categories</h1>
-    <ul>
-      {% for category in categories %}
-        <li>
-          <a href="{{url_for('showItems', category_id=category.id)}}">{{category.name}}</a>
-        </li>
-      {% endfor %}
-    </ul>
-    <h1>Latest Items</h1>
-    <ul>
-      {% for item in latestItems %}
-        <li>
-          {{item.name}}
-        </li>
-      {% endfor %}
-    </ul>
+    <header>
+      <h1>Sports Catalog</h1>
+    </header>
+    <div id="categories_content">
+      <h1>Categories</h1>
+      <ul>
+        {% for category in categories %}
+          <li>
+            <a href="{{url_for('showItems', category_id=category.id)}}">{{category.name}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <h1>Latest Items Added</h1>
+      <ul>
+        {% for item in latestItems %}
+          <li>
+            {{item.name}}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </body>
 </html>

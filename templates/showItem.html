@@ -1,16 +1,21 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Catalog App</title>
+    <title>{{item.name}} | Sports Catalog</title>
     <meta charset="utf-8" content="width=device-width", initial-scale="1.0">
-    <link href="static/style.css" rel="stylesheet" />
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Catalog App</h1>
-    <h1>{{item.name}}</h1>
-    <p>
-      {{item.description}}
-    </p>
-    <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
-    <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
+    <header>
+      <h1>Sports Catalog</h1>
+    </header>
+    <div id="item_content">
+      <h1>{{item.name}}</h1>
+      <p>
+        {{item.description}}
+      </p>
+      <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
+      <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
+    </div>
   </body>
 </html>

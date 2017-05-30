@@ -1,26 +1,34 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <title>Catalog App</title>
+    <title>{{category.name}} | Catalog App</title>
     <meta charset="utf-8" content="width=device-width", initial-scale="1.0">
-    <link href="static/style.css" rel="stylesheet" />
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <h1>Catalog App</h1>
-    <h1>Categories</h1>
-    <ul>
-      {% for category in categories %}
-        <li>
-          <a href="{{url_for('showItems', category_id=category.id)}}">{{category.name}}</a>
-        </li>
-      {% endfor %}
-    </ul>
-    <h1>{{category.name}} Items</h1>
-    <ul>
-      {% for item in items %}
-        <li>
-          <a href="{{url_for('showItem', category_id=category.id, item_id=item.id)}}">{{item.name}}</a>
-        </li>
-      {% endfor %}
-    </ul>
+    <header>
+      <h1>Sports Catalog</h1>
+    </header>
+    <div id="category_content">
+      <h1>Categories</h1>
+      <ul>
+        {% for category in categories %}
+          <li>
+            <a href="{{url_for('showItems', category_id=category.id)}}">{{category.name}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <h1>{{category.name}} Items</h1>
+      <ul>
+        {% for item in items %}
+          <li>
+            <a href="{{url_for('showItem', category_id=category.id, item_id=item.id)}}">{{item.name}}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      {% if allowed %}
+        <a href="{{url_for('addItem')}}">Add</a>
+      {% endif %}
+    </div>
   </body>
 </html>
