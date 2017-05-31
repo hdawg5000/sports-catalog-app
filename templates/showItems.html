@@ -34,7 +34,9 @@
         {% endfor %}
       </ul>
       {% if allowed %}
-        <a href="{{url_for('addItem')}}">Add</a>
+        <div id="links" class="add">
+          <a href="{{url_for('addItem')}}">Add</a>
+        </div>
       {% endif %}
     </div>
   </body>

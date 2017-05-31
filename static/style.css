@@ -84,6 +84,10 @@ li {
   padding: 10px;
 }
 
+.add {
+  margin-left: 40px;
+}
+
 /* Edit and Delete forms */
 #form_content input[type=text] {
   width: 250px;
