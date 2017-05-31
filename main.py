@@ -94,6 +94,15 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    #Check if user is an existing user in the databse. If not, add to database
+    user = session.query(User).filter_by(username=login_session['email']).one_or_none()
+
+    #If user doesn't exist, create new user
+    if user is None:
+        newUser = User(name=login_session['username'], username=login_session['email'])
+        session.add(newUser)
+        session.commit()
+
     return redirect(url_for('showHomePage'))
 
 #Revoke a current user's token and reset their login_session
@@ -205,6 +214,8 @@ def editItem(category_id, item_id):
         category = session.query(Category).filter_by(id=category_id).one()
         item = session.query(Item).filter_by(id=item_id).one()
         categories = session.query(Category).all()
+        user_id = item.user_id
+        item_creator = session.query(User).filter_by()
         return render_template('editItem.html', item=item, category=category, categories=categories, allowed=logged_in)
 
 #Delete item from category
