@@ -3,48 +3,55 @@
   <head>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+    <link href="/static/style.css" rel="stylesheet" />
   </head>
   <body>
-    <!-- GOOGLE PLUS SIGN IN BUTTON-->
-    <div id="signInButton">
-      <span class="g-signin"
-        data-scope="openid email"
-        data-clientid="143806303975-2202uh6s8vdmr2tqupdu6d49jb142tku.apps.googleusercontent.com"
-        data-redirecturi="postmessage"
-        data-accesstype="offline"
-        data-cookiepolicy="single_host_origin"
-        data-callback="signInCallback"
-        data-approvalprompt="force">
-      </span>
+    <div id="login_form">
+      <!-- GOOGLE PLUS SIGN IN BUTTON-->
+      <h1>Login</h1>
+      <p>
+        Login with Google below
+      </p>
+      <div id="signInButton">
+        <span class="g-signin"
+          data-scope="openid email"
+          data-clientid="143806303975-2202uh6s8vdmr2tqupdu6d49jb142tku.apps.googleusercontent.com"
+          data-redirecturi="postmessage"
+          data-accesstype="offline"
+          data-cookiepolicy="single_host_origin"
+          data-callback="signInCallback"
+          data-approvalprompt="force">
+        </span>
+      </div>
     </div>
-    <div id="result">
-    </div>
-    <script>
-      function signInCallback(authResult) {
-        //Onetime auth code is successful if authresult contains code
-        if (authResult['code']) {
-          $('#signInButton').attr('style', 'display:none');
-          $.ajax({
-            type: 'POST',
-            url: '/gconnect?state={{STATE}}',
-            processData: false, //processdata indicates we don't want jQ to process the response into a string
-            contentType: 'application/octet-stream; charset=utf-8',
-            data: authResult['code'],
-            success: function(result) {
-              if (result) {
-                $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
-                  setTimeout(function() {
-                    window.location.href = "/";
-                  }, 4000);
-              } else if (authResult['error']) {
-                  console.log('There was an error: ' + authResult['error']);
-              } else {
-                  $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+      <div id="result">
+      </div>
+      <script>
+        function signInCallback(authResult) {
+          //Onetime auth code is successful if authresult contains code
+          if (authResult['code']) {
+            $('#signInButton').attr('style', 'display:none');
+            $.ajax({
+              type: 'POST',
+              url: '/gconnect?state={{STATE}}',
+              processData: false, //processdata indicates we don't want jQ to process the response into a string
+              contentType: 'application/octet-stream; charset=utf-8',
+              data: authResult['code'],
+              success: function(result) {
+                if (result) {
+                  $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+                    setTimeout(function() {
+                      window.location.href = "/";
+                    }, 0);
+                } else if (authResult['error']) {
+                    console.log('There was an error: ' + authResult['error']);
+                } else {
+                    $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                }
               }
-            }
-          });
+            });
+          }
         }
-      }
-    </script>
+      </script>
   </body>
 </html>

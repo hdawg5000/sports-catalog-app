@@ -19,7 +19,7 @@ header {
   padding: 15px;
   border-bottom: 2px solid #000;
 }
-#login {
+#login, #logout {
   width: 140px;
   height: 42px;
   background-color: #d83939;
@@ -53,9 +53,8 @@ li {
   line-height: 2em;
 }
 
-#item_content, #categories_content, #category_content, #form_content {
+#item_content, #categories_content, #category_content, #form_content, #login_form {
   width: 50%;
-  float: center;
   margin: 100px auto;
   background-color: #ffffff;
   padding: 20px;

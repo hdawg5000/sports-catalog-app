@@ -123,7 +123,7 @@ def gdisconnect():
 
         response = make_response(json.dumps('Successfully disconnected'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return redirect(url_for('showHomePage'))
     else:
         #Any response other than 200, the given token was Invalid
         response = make_response(json.dumps('Failed to revoke token for given user', 400))
@@ -167,10 +167,12 @@ def showItem(category_id, item_id):
 #Add a new item given the category ID
 @app.route('/item/new', methods=['GET', 'POST'])
 def addItem():
+    logged_in = True
     categories = session.query(Category).all()
     if request.method == 'POST':
         #Check is user is logged in. If not, redirect to login page
         if 'username' not in login_session:
+            logged_in = False
             return redirect('/login')
         else:
             categoryName = request.form['category']
@@ -180,11 +182,12 @@ def addItem():
             session.commit()
             return redirect(url_for('showItems', category_id=category.id))
     else:
-        return render_template('addItem.html', categories=categories)
+        return render_template('addItem.html', categories=categories, allowed=logged_in)
 
 #Edit an item given the category ID
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(category_id, item_id):
+    logged_in = True
     if request.method == 'POST':
         #Check is user is logged in. If not, redirect to login page
         if 'username' not in login_session:
@@ -202,13 +205,15 @@ def editItem(category_id, item_id):
         category = session.query(Category).filter_by(id=category_id).one()
         item = session.query(Item).filter_by(id=item_id).one()
         categories = session.query(Category).all()
-        return render_template('editItem.html', item=item, category=category, categories=categories)
+        return render_template('editItem.html', item=item, category=category, categories=categories, allowed=logged_in)
 
 #Delete item from category
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(category_id, item_id):
     #Check is user is logged in. If not, redirect to login page
+    logged_in = True
     if 'username' not in login_session:
+        logged_in = False
         return redirect('/login')
     else:
         category = session.query(Category).filter_by(id=category_id).one()
@@ -216,10 +221,10 @@ def deleteItem(category_id, item_id):
             item = session.query(Item).filter_by(id=item_id).one()
             session.delete(item)
             session.commit()
-            return redirect(url_for('showItems', category_id=category.id))
+            return redirect(url_for('showItems', category_id=category.id, allowed=logged_in))
         else:
             item = session.query(Item).filter_by(id=item_id).one()
-            return render_template('deleteItem.html', item=item, category=category)
+            return render_template('deleteItem.html', item=item, category=category, allowed=logged_in)
 
 #API endpoint to show all categories
 @app.route('/api/v1/categories.json')
