@@ -27,9 +27,13 @@
         <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
       </div>
       {% else %}
+      <div id="links">
+        <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}" disabled="true" id="disabled">Edit</a>
+        <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}" disabled="true" id="disabled">Delete</a>
         <p>
-          You are not authorized to edit or delete this item.
+          You are not authorized to edit or delete this item
         </p>
+      </div>
       {% endif %}
     </div>
   </body>
