@@ -167,11 +167,21 @@ def showItems(category_id):
 def showItem(category_id, item_id):
     #Check is user is logged in. If not, edit and delete links will be hidden
     logged_in = True
-    if 'username' not in login_session:
-        logged_in = False
+    logged_in_username = ""
+    authorized = False
     category = session.query(Category).filter_by(id=category_id).one()
     item = session.query(Item).filter_by(id=item_id).one()
-    return render_template('showItem.html', item=item, category=category, allowed=logged_in)
+    if 'username' not in login_session:
+        logged_in = False
+    else:
+        logged_in_username = login_session['email']
+        item_creator_username = session.query(User).filter_by(id=item.user_id).one()
+        print ("item creator username " + str(item_creator_username.username))
+        print ("logged in username " + str(logged_in_username))
+        authorized = False
+        if item_creator_username.username == str(logged_in_username):
+            authorized = True
+    return render_template('showItem.html', item=item, category=category, allowed=logged_in, authorized=authorized)
 
 #Add a new item given the category ID
 @app.route('/item/new', methods=['GET', 'POST'])
@@ -186,7 +196,9 @@ def addItem():
         else:
             categoryName = request.form['category']
             category = session.query(Category).filter_by(name=categoryName).one()
-            newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=1)
+            item_creator_username = login_session['email']
+            item_creator_id = session.query(User).filter_by(username=item_creator_username).one()
+            newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=item_creator_id.id)
             session.add(newItem)
             session.commit()
             return redirect(url_for('showItems', category_id=category.id))
@@ -197,25 +209,23 @@ def addItem():
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(category_id, item_id):
     logged_in = True
-    if request.method == 'POST':
-        #Check is user is logged in. If not, redirect to login page
-        if 'username' not in login_session:
-            return redirect('/login')
-        else:
-            category = session.query(Category).filter_by(name=request.form['category']).one()
-            item = session.query(Item).filter_by(id=item_id).one()
-            item.name = request.form['name']
-            item.description = request.form['description']
-            item.category_id = category.id
-            session.add(item)
-            session.commit()
-            return redirect(url_for('showItems', category_id=category.id))
+    #Check is user is logged in. If not, redirect to login page
+    if 'username' not in login_session:
+        return redirect('/login')
+    elif request.method == 'POST':
+        category = session.query(Category).filter_by(name=request.form['category']).one()
+        item = session.query(Item).filter_by(id=item_id).one()
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.category_id = category.id
+        session.add(item)
+        session.commit()
+        return redirect(url_for('showItems', category_id=category.id))
     else:
         category = session.query(Category).filter_by(id=category_id).one()
         item = session.query(Item).filter_by(id=item_id).one()
         categories = session.query(Category).all()
-        user_id = item.user_id
-        item_creator = session.query(User).filter_by()
+        logged_in = session.query(User).filter_by(username=login_session)
         return render_template('editItem.html', item=item, category=category, categories=categories, allowed=logged_in)
 
 #Delete item from category

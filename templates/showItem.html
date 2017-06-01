@@ -21,10 +21,16 @@
       <p>
         {{item.description}}
       </p>
+      {% if authorized %}
       <div id="links">
         <a href="{{url_for('editItem', category_id=category.id, item_id=item.id)}}">Edit</a>
         <a href="{{url_for('deleteItem', category_id=category.id, item_id=item.id)}}">Delete</a>
       </div>
+      {% else %}
+        <p>
+          You are not authorized to edit or delete this item.
+        </p>
+      {% endif %}
     </div>
   </body>
 </html>
