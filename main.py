@@ -165,20 +165,21 @@ def showItems(category_id):
 #Show item name and description
 @app.route('/category/<int:category_id>/item/<int:item_id>')
 def showItem(category_id, item_id):
-    #Check is user is logged in. If not, edit and delete links will be hidden
     logged_in = True
     logged_in_username = ""
     authorized = False
     category = session.query(Category).filter_by(id=category_id).one()
     item = session.query(Item).filter_by(id=item_id).one()
+
+    #Check is user is logged in. If not, edit and delete links will be hidden
     if 'username' not in login_session:
         logged_in = False
     else:
         logged_in_username = login_session['email']
         item_creator_username = session.query(User).filter_by(id=item.user_id).one()
-        print ("item creator username " + str(item_creator_username.username))
-        print ("logged in username " + str(logged_in_username))
         authorized = False
+
+        #Check to see if item's creater ID matches logged-in user's ID. If so, user is authorized to edit or delete item
         if item_creator_username.username == str(logged_in_username):
             authorized = True
     return render_template('showItem.html', item=item, category=category, allowed=logged_in, authorized=authorized)
@@ -196,6 +197,7 @@ def addItem():
         else:
             categoryName = request.form['category']
             category = session.query(Category).filter_by(name=categoryName).one()
+            #Get item created user ID and create item
             item_creator_username = login_session['email']
             item_creator_id = session.query(User).filter_by(username=item_creator_username).one()
             newItem = Item(name=request.form['name'], description=request.form['description'], category_id=category.id, user_id=item_creator_id.id)
@@ -213,6 +215,7 @@ def editItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
     elif request.method == 'POST':
+        #Get item details from form and create item
         category = session.query(Category).filter_by(name=request.form['category']).one()
         item = session.query(Item).filter_by(id=item_id).one()
         item.name = request.form['name']
